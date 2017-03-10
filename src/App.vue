@@ -5,7 +5,7 @@
         <div>
             <input type="text" @keyup.enter="addTodo" v-model="newTodo">
             <button @click="allDone">Mark all as done</button>
-            <list :todos="showTodos"></list>
+            <list :todos="showTodos" @saveChange="save"></list>
             <buttons @newStatus="setStatus" :status="status"></buttons>
             <button @click="clearDone">Clear All Done</button>
         </div>
@@ -17,7 +17,9 @@
     import List from './components/List.vue'
     import Buttons from './components/Buttons.vue'
     import Message from './components/Message.vue'
+    import Storage from './util/storage'
 
+    const storageName = 'todo-app';
     export default {
         name: 'app',
         data () {
@@ -25,6 +27,21 @@
                 newTodo:'',
                 todos: [],
                 status: 'ALL'
+            }
+        },
+        watch:{
+            todos(){
+               this.save()
+            },
+            status(){
+                this.save()
+            }
+        },
+        created(){
+            let state = Storage.fetch(storageName);
+            if(state) {
+                this.todos = state.todos;
+                this.status = state.status;
             }
         },
         computed:{
@@ -41,14 +58,14 @@
         },
         methods: {
             addTodo(){
-                this.todos.push({
+                this.todos = [...this.todos, {
                     text: this.newTodo,
                     done:false
-                });
+                }];
                 this.newTodo = '';
             },
             setStatus(status){
-                this.status = status
+                this.status = status;
             },
             clearDone(){
                 this.todos = this.todos.filter(todo => !todo.done);
@@ -57,10 +74,16 @@
             allDone(){
                 this.todos = this.todos.map(todo => {
                     return Object.assign(todo, {
-                        done: !todo.done
+                        done:true
                     })
                 });
                 this.status = 'ALL'
+            },
+            save(){
+                Storage.save(storageName, {
+                    todos:this.todos,
+                    status: this.status
+                })
             }
         },
         components:{

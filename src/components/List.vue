@@ -2,7 +2,7 @@
     <div class="hello">
         <ul>
             <li v-for="(todo, index) in todos" :key="todo.text + index">
-                <input type="checkbox" v-model="todo.done" :id="'task' + index">
+                <input type="checkbox" v-model="todo.done" :id="'task' + index" @change="saveChange">
                 <label
                         :for="'task' + index"
                         :class="{done: todo.done}">
@@ -22,6 +22,11 @@
             todos:{
                 type:Array,
                 default:[]
+            }
+        },
+        methods:{
+            saveChange(){
+                this.$emit('saveChange')
             }
         }
     }

@@ -5,7 +5,12 @@
         <div>
             <input type="text" @keyup.enter="addTodo" v-model="newTodo">
             <button @click="allDone">Mark all as done</button>
-            <list :todos="showTodos" @saveChange="save"></list>
+            <list
+                    :todos="showTodos"
+                    @saveChange="save"
+                    @removeTodo="removeTodo">
+
+            </list>
             <buttons @newStatus="setStatus" :status="status"></buttons>
             <button @click="clearDone">Clear All Done</button>
         </div>
@@ -26,7 +31,8 @@
             return {
                 newTodo:'',
                 todos: [],
-                status: 'ALL'
+                status: 'ALL',
+                _id:0
             }
         },
         watch:{
@@ -42,6 +48,7 @@
             if(state) {
                 this.todos = state.todos;
                 this.status = state.status;
+                this._id = state._id;
             }
         },
         computed:{
@@ -60,7 +67,8 @@
             addTodo(){
                 this.todos = [...this.todos, {
                     text: this.newTodo,
-                    done:false
+                    done:false,
+                    id: this._id++
                 }];
                 this.newTodo = '';
             },
@@ -70,6 +78,9 @@
             clearDone(){
                 this.todos = this.todos.filter(todo => !todo.done);
                 this.status = 'ALL'
+            },
+            removeTodo(id){
+                this.todos = this.todos.filter(todo => todo.id !== id);
             },
             allDone(){
                 this.todos = this.todos.map(todo => {
@@ -82,7 +93,8 @@
             save(){
                 Storage.save(storageName, {
                     todos:this.todos,
-                    status: this.status
+                    status: this.status,
+                    _id: this._id
                 })
             }
         },

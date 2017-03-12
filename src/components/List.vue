@@ -9,6 +9,8 @@
                         :class="{done: todo.done}">
                     {{todo.text}}
                 </label>
+                <a href="#" @click.prevent="removeTodo(todo.id)">remove</a>
+
             </li>
             </transition-group>
         </ul>
@@ -28,6 +30,9 @@
         methods:{
             saveChange(){
                 this.$emit('saveChange')
+            },
+            removeTodo(id){
+                this.$emit('removeTodo', id)
             }
         }
     }

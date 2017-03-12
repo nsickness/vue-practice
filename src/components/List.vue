@@ -1,6 +1,7 @@
 <template>
     <div class="hello">
         <ul>
+            <transition-group name="fade">
             <li v-for="(todo, index) in todos" :key="todo.text + index">
                 <input type="checkbox" v-model="todo.done" :id="'task' + index" @change="saveChange">
                 <label
@@ -9,10 +10,10 @@
                     {{todo.text}}
                 </label>
             </li>
-
-
+            </transition-group>
         </ul>
     </div>
+
 </template>
 
 <script>
@@ -37,5 +38,12 @@
     ul {
         list-style-type: none;
         padding: 0;
+    }
+    .fade-enter-active, .fade-leave-active {
+        transition: .2s ease-out
+    }
+    .fade-enter, .fade-leave-to {
+        transform: translateY(-100%);
+        opacity: 0;
     }
 </style>

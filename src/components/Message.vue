@@ -8,15 +8,15 @@
 <script type="text/babel">
 
     export default {
-        name:'message',
-        props:{
-            status:{
-                type:String,
-                default:'ALL'
+        name: 'message',
+        props: {
+            status: {
+                type: String,
+                default: 'ALL'
             },
-            count:{
-                type:Number,
-                default:0
+            count: {
+                type: Number,
+                default: 0
             }
         }
     }

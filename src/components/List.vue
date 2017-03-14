@@ -1,21 +1,18 @@
 <template>
     <div class="hello">
-        <ul>
+        <md-list>
             <transition-group name="fade">
-            <li v-for="(todo, index) in todos" :key="todo.text + index">
-                <input type="checkbox" v-model="todo.done" :id="'task' + index" @change="saveChange">
-                <label
-                        :for="'task' + index"
-                        :class="{done: todo.done}">
-                    {{todo.text}}
-                </label>
-                <a href="#" @click.prevent="removeTodo(todo.id)">remove</a>
+                <md-list-item v-for="(todo, index) in todos" :key="todo.text + index">
+                        <md-checkbox style="flex:100%" v-model="todo.done" :id="'task' + index" @change.native="saveChange"> <span :class="{done: todo.done}">{{todo.text}}</span></md-checkbox>
 
-            </li>
+                    <md-button class="md-dense" @click.native="removeTodo(todo.id)">
+                        remove
+                    </md-button>
+                    <md-divider></md-divider>
+                </md-list-item>
             </transition-group>
-        </ul>
+        </md-list>
     </div>
-
 </template>
 
 <script>
@@ -39,10 +36,9 @@
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
-    ul {
-        list-style-type: none;
-        padding: 0;
+<style>
+    .md-checkbox-label{
+        width: 100%;
     }
     .fade-enter-active, .fade-leave-active {
         transition: .2s ease-out

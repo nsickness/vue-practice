@@ -1,26 +1,43 @@
 <template>
     <div id="app">
-        <img src="./assets/logo.png">
-        <message :status="status" :count="todos.length"></message>
-        <div>
-            <input type="text" @keyup.enter="addTodo" v-model="newTodo">
-            <button @click="allDone">Mark all as done</button>
-            <list
-                    :todos="showTodos"
-                    @saveChange="save"
-                    @removeTodo="removeTodo">
+        <md-toolbar>
+            <h1 class="md-title" >Todo list</h1>
+            <md-layout md-row md-flex="1" md-align="end">
+                <md-button @click.native="clearDone" class="md-default"><md-icon>delete</md-icon> Clear All Done</md-button>
+                <md-button @click.native="allDone" class="md-default"><md-icon>edit</md-icon> Mark all as done</md-button>
+            </md-layout>
+            <!--<message :status="status" :count="todos.length"></message>-->
 
-            </list>
-            <buttons @newStatus="setStatus" :status="status"></buttons>
-            <button @click="clearDone">Clear All Done</button>
-        </div>
+        </md-toolbar>
+        <main>
+            <md-layout md-gutter md-column>
+                <md-layout md-row md-gutter="16">
+                    <md-layout md-flex="1">
+                        <md-input-container v-show="status !== 'DONE'">
+                            <label>What are you going to do?</label>
+                            <md-input placeholder="New Todo" @keyup.enter.native="addTodo" v-model="newTodo"></md-input>
+                        </md-input-container>
+                    </md-layout>
+                    <md-layout md-flex="20">
+                        <status @newStatus="setStatus" :status="status"></status>
+                    </md-layout>
+                </md-layout>
+
+                <list
+                        :todos="showTodos"
+                        @saveChange="save"
+                        @removeTodo="removeTodo">
+                </list>
+
+            </md-layout>
+        </main>
     </div>
 </template>
 
 <script type="text/babel">
 
     import List from './components/List.vue'
-    import Buttons from './components/Buttons.vue'
+    import Status from './components/Status.vue'
     import Message from './components/Message.vue'
     import Storage from './util/storage'
 
@@ -100,29 +117,24 @@
         },
         components:{
             List,
-            Buttons,
+            Status,
             Message
         }
     }
 </script>
 
 <style>
-    #app {
-        font-family: 'Avenir', Helvetica, Arial, sans-serif;
-        -webkit-font-smoothing: antialiased;
-        -moz-osx-font-smoothing: grayscale;
-        text-align: center;
-        color: #2c3e50;
-        margin-top: 60px;
+    #app{
+        font-family:'Roboto', sans-serif;
     }
-    h1, h2 {
-        font-weight: normal;
+    .md-gutter:not(.md-column)>.md-layout {
+        padding-right: 12px;
+        padding-left: 12px;
     }
-
     .done{
         text-decoration: line-through;
     }
-    a {
-        color: #42b983;
+    main {
+        padding: 0 16px;
     }
 </style>
